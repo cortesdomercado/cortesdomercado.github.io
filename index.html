@@ -1,9 +1,1483 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head><meta charset="UTF-8"><title>Cortes do Mercado</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cortes do Mercado — O mercado financeiro em 60 segundos</title>
+  <meta name="description" content="Cortes do Mercado é um canal de curadoria de conteúdo sobre mercado financeiro, bolsa de valores, ações e criptomoedas. Os melhores momentos dos maiores podcasts financeiros do Brasil, direto no seu feed.">
+  <meta property="og:title" content="Cortes do Mercado">
+  <meta property="og:description" content="O mercado financeiro em 60 segundos. Curadoria dos melhores momentos dos maiores podcasts de investimentos do Brasil.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cortesdomercado.github.io">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-deep: #0d1f0f;
+      --green-dark: #132b14;
+      --green-mid: #1c3b1e;
+      --green-light: #234d26;
+      --gold: #c9952a;
+      --gold-light: #e0a93a;
+      --gold-dim: #a07820;
+      --white: #ffffff;
+      --gray-100: #f5f5f5;
+      --gray-200: #e0e0e0;
+      --gray-400: #9e9e9e;
+      --gray-600: #555;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.75);
+      --text-muted: rgba(255,255,255,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--green-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13, 31, 15, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(201, 149, 42, 0.15);
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      filter: drop-shadow(0 0 8px rgba(201,149,42,0.4));
+    }
+
+    .nav-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-logo-text span { color: var(--gold); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--green-deep) !important;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 700 !important;
+      transition: background 0.2s, transform 0.1s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold-light) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 48px 80px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 60% 40%, rgba(201,149,42,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(28,59,30,0.6) 0%, transparent 60%),
+        linear-gradient(165deg, var(--green-dark) 0%, var(--green-deep) 60%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,149,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,149,42,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Animated candlesticks background */
+    .candlestick-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      padding: 0 5%;
+      opacity: 0.06;
+      pointer-events: none;
+    }
+
+    .candle {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .candle-wick {
+      width: 2px;
+      background: var(--gold);
+      animation: candleFlicker 3s ease-in-out infinite;
+    }
+
+    .candle-body {
+      width: 100%;
+      border-radius: 2px;
+      animation: candleGrow 4s ease-in-out infinite;
+    }
+
+    .candle-body.green { background: #22c55e; }
+    .candle-body.red { background: #ef4444; }
+
+    @keyframes candleGrow {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.05); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(201,149,42,0.12);
+      border: 1px solid rgba(201,149,42,0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 .gold { color: var(--gold); }
+    .hero h1 .outline {
+      -webkit-text-stroke: 2px var(--gold);
+      color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--green-deep);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(201,149,42,0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(201,149,42,0.5);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px solid rgba(201,149,42,0.4);
+      color: var(--gold-light);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      background: rgba(201,149,42,0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 2;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-end;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,149,42,0.15);
+      border-radius: 12px;
+      padding: 20px 28px;
+      text-align: right;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(201,149,42,0.4);
+      transform: translateX(-4px);
+    }
+
+    .stat-number {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section { padding: 96px 48px; }
+
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin: 20px 0 40px;
+    }
+
+    /* ===== ABOUT ===== */
+    #sobre {
+      background: var(--green-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #sobre::before {
+      content: '';
+      position: absolute;
+      right: -200px; top: -200px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,149,42,0.06) 0%, transparent 70%);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card-main {
+      background: var(--green-mid);
+      border: 1px solid rgba(201,149,42,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card-main::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+    }
+
+    .about-icon-big {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 16px rgba(201,149,42,0.4));
+    }
+
+    .about-card-main h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .about-card-main p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .about-card-float {
+      position: absolute;
+      right: -24px;
+      bottom: -24px;
+      background: var(--gold);
+      color: var(--green-deep);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 13px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(201,149,42,0.4);
+    }
+
+    .about-card-float .big { font-size: 28px; display: block; }
+
+    .value-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .value-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .value-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(201,149,42,0.12);
+      border: 1px solid rgba(201,149,42,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .value-item:hover .value-icon {
+      background: rgba(201,149,42,0.22);
+      transform: scale(1.05);
+    }
+
+    .value-item h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .value-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    #como-funciona {
+      background: var(--green-deep);
+    }
+
+    .how-center { max-width: 1200px; margin: 0 auto; }
+
+    .how-header { margin-bottom: 64px; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 40px; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,149,42,0.3), transparent);
+    }
+
+    .step-card {
+      background: var(--green-dark);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .step-card:hover {
+      border-color: rgba(201,149,42,0.3);
+      transform: translateY(-4px);
+    }
+
+    .step-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(201,149,42,0.12);
+      border: 2px solid rgba(201,149,42,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold);
+      margin: 0 auto 20px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .step-card:hover .step-num {
+      background: rgba(201,149,42,0.22);
+      border-color: var(--gold);
+    }
+
+    .step-emoji {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .step-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== FORMATS ===== */
+    #formatos {
+      background: var(--green-dark);
+    }
+
+    .formats-center { max-width: 1200px; margin: 0 auto; }
+
+    .formats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .format-card {
+      background: var(--green-mid);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 36px 28px;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .format-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .format-card:hover::before { transform: scaleX(1); }
+
+    .format-card:hover {
+      border-color: rgba(201,149,42,0.25);
+      transform: translateY(-4px);
+    }
+
+    .format-tag {
+      display: inline-block;
+      background: rgba(201,149,42,0.15);
+      border: 1px solid rgba(201,149,42,0.25);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .format-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .format-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .format-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .format-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ===== SOURCES ===== */
+    #fontes {
+      background: var(--green-deep);
+    }
+
+    .sources-center { max-width: 1200px; margin: 0 auto; }
+
+    .sources-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .source-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-dark);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 14px 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .source-chip:hover {
+      border-color: rgba(201,149,42,0.3);
+      transform: translateY(-2px);
+    }
+
+    .source-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .source-dot.high { background: var(--gold); }
+    .source-dot.mid { background: #4ade80; }
+    .source-dot.low { background: var(--gray-400); }
+
+    .source-name { font-size: 14px; font-weight: 600; }
+    .source-type { font-size: 12px; color: var(--text-muted); }
+
+    .sources-legend {
+      display: flex;
+      gap: 24px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ===== PLATFORMS ===== */
+    #plataformas {
+      background: var(--green-dark);
+    }
+
+    .platforms-center { max-width: 1200px; margin: 0 auto; }
+
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+
+    .platform-card {
+      background: var(--green-mid);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .platform-card:hover {
+      border-color: rgba(201,149,42,0.25);
+      transform: translateY(-4px);
+    }
+
+    .platform-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .platform-icon.tiktok { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+    .platform-icon.youtube { background: rgba(255,0,0,0.15); border: 1px solid rgba(255,0,0,0.2); }
+    .platform-icon.instagram { background: rgba(195,42,163,0.15); border: 1px solid rgba(195,42,163,0.2); }
+
+    .platform-info h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .platform-info p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== ABOUT US ===== */
+    #sobre-nos {
+      background: var(--green-deep);
+    }
+
+    .about-us-center { max-width: 1200px; margin: 0 auto; }
+
+    .mission-box {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      border: 1px solid rgba(201,149,42,0.2);
+      border-radius: 20px;
+      padding: 56px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+
+    .mission-box::before {
+      content: '"';
+      position: absolute;
+      top: -20px; left: 40px;
+      font-size: 200px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      color: rgba(201,149,42,0.06);
+      line-height: 1;
+    }
+
+    .mission-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 700;
+      line-height: 1.4;
+      max-width: 700px;
+      position: relative;
+    }
+
+    .mission-text .gold { color: var(--gold); }
+
+    .mission-author {
+      margin-top: 32px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .principle-card {
+      background: var(--green-dark);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 28px;
+      transition: border-color 0.3s;
+    }
+
+    .principle-card:hover { border-color: rgba(201,149,42,0.2); }
+
+    .principle-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      color: rgba(201,149,42,0.2);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .principle-card h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .principle-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== CONTACT ===== */
+    #contato {
+      background: var(--green-dark);
+    }
+
+    .contact-center {
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-card {
+      background: var(--green-mid);
+      border: 1px solid rgba(201,149,42,0.2);
+      border-radius: 20px;
+      padding: 56px 48px;
+      margin-top: 56px;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(201,149,42,0.08);
+    }
+
+    .contact-email {
+      font-size: 18px;
+      color: var(--gold-light);
+      font-weight: 600;
+      margin-top: 16px;
+      display: block;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--green-deep);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 48px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .footer-logo img { height: 28px; }
+
+    .footer-logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .footer-logo-text span { color: var(--gold); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold-light); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero { flex-direction: column; gap: 60px; }
+      .hero-stats { align-items: flex-start; flex-direction: row; flex-wrap: wrap; margin-left: 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid::before { display: none; }
+      .formats-grid { grid-template-columns: repeat(2, 1fr); }
+      .platforms-grid { grid-template-columns: 1fr; }
+      .principles-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 24px; }
+      .nav-links { display: none; }
+      section { padding: 64px 24px; }
+      .hero { padding: 100px 24px 64px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .formats-grid { grid-template-columns: 1fr; }
+      .principles-grid { grid-template-columns: 1fr; }
+      .mission-box { padding: 36px 28px; }
+      .contact-card { padding: 36px 24px; }
+      footer { padding: 32px 24px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+
+    /* ===== SCROLL ANIMATION ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
 <body>
-<h1>Cortes do Mercado</h1>
-<p><a href="termos-de-uso.html">Termos de Uso</a></p>
-<p><a href="politica-de-privacidade.html">Política de Privacidade</a></p>
+
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo" id="nav-logo-link">
+      <img src="assets/logo-icon.png" alt="Cortes do Mercado ícone" id="nav-logo-img">
+      <span class="nav-logo-text">CORTES <span>DO MERCADO</span></span>
+    </a>
+    <ul class="nav-links" id="nav-menu">
+      <li><a href="#sobre" id="nav-link-sobre">Sobre</a></li>
+      <li><a href="#como-funciona" id="nav-link-como">Como Funciona</a></li>
+      <li><a href="#formatos" id="nav-link-formatos">Formatos</a></li>
+      <li><a href="#plataformas" id="nav-link-plataformas">Plataformas</a></li>
+      <li><a href="#contato" id="nav-link-contato" class="nav-cta">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <!-- Animated candlestick chart background -->
+    <div class="candlestick-bg" aria-hidden="true" id="candlestick-bg">
+      <!-- Generated via JS -->
+    </div>
+
+    <div class="hero-content fade-up" id="hero-content">
+      <div class="hero-badge" id="hero-badge">📈 Mercado Financeiro em Curto Formato</div>
+      <h1 id="hero-title">
+        O mercado<br>
+        em <span class="gold">60 segundos</span>
+      </h1>
+      <p class="hero-desc" id="hero-desc">
+        Curadoria editorial dos <strong>melhores momentos</strong> dos maiores podcasts financeiros do Brasil. Previsões, debates, erros e bastidores — tudo condensado no formato que o seu feed consome.
+      </p>
+      <div class="hero-actions" id="hero-actions">
+        <a href="https://www.tiktok.com/@cortesdomercado" target="_blank" rel="noopener noreferrer" class="btn-primary" id="hero-btn-tiktok">
+          🎵 Ver no TikTok
+        </a>
+        <a href="https://www.youtube.com/@cortesdomercado" target="_blank" rel="noopener noreferrer" class="btn-secondary" id="hero-btn-youtube">
+          ▶ Ver no YouTube
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-stats" id="hero-stats">
+      <div class="stat-card fade-up" id="stat-card-1">
+        <div class="stat-number">60s</div>
+        <div class="stat-label">Duração média dos Shorts</div>
+      </div>
+      <div class="stat-card fade-up" id="stat-card-2">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">Podcasts curados por semana</div>
+      </div>
+      <div class="stat-card fade-up" id="stat-card-3">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Plataformas · TikTok & YouTube</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="sobre">
+    <div class="about-grid">
+      <div class="about-visual fade-up" id="about-visual">
+        <div class="about-card-main" id="about-card-main">
+          <img src="assets/logo-icon.png" alt="Cortes do Mercado" class="about-icon-big" id="about-logo-big">
+          <h3>Canal de Curadoria Financeira</h3>
+          <p>
+            Somos um canal especializado em extrair, editar e publicar os momentos mais impactantes dos principais podcasts e entrevistas do mercado financeiro brasileiro. Cada vídeo passa por curadoria editorial rigorosa antes de ser publicado.
+          </p>
+          <div class="about-card-float" id="about-float-badge">
+            <span class="big">100%</span>
+            Curadoria<br>Editorial
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up" id="about-text">
+        <span class="section-label">Sobre o Canal</span>
+        <h2 class="section-title">Não é mais um canal de cortes. É curadoria.</h2>
+        <div class="divider"></div>
+        <p class="section-sub">
+          O <strong>Cortes do Mercado</strong> seleciona os momentos que realmente importam — previsões ousadas, discordâncias técnicas, admissões de erro — e os apresenta com contexto editorial, legenda profissional e identidade visual consistente.
+        </p>
+        <br><br>
+        <div class="value-list" id="value-list">
+          <div class="value-item">
+            <div class="value-icon">🎯</div>
+            <div>
+              <h4>Curadoria com critério</h4>
+              <p>Selecionamos apenas trechos que fazem sentido sozinhos — sem exigir que o espectador tenha assistido o episódio completo.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">✂️</div>
+            <div>
+              <h4>Edição que transforma</h4>
+              <p>Legenda ativa, elementos gráficos contextuais, moldura de marca — cada vídeo é genuinamente editado, não apenas recortado.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">📊</div>
+            <div>
+              <h4>Foco no investidor intermediário</h4>
+              <p>Conteúdo para quem já investe ou está prestes a começar, mas não tem tempo para podcasts de uma hora inteira.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="como-funciona">
+    <div class="how-center">
+      <div class="how-header fade-up" id="how-header">
+        <span class="section-label">Processo</span>
+        <h2 class="section-title">Como o conteúdo é produzido</h2>
+        <div class="divider"></div>
+        <p class="section-sub">Cada vídeo publicado passa por um processo editorial estruturado em 4 etapas, garantindo qualidade e consistência.</p>
+      </div>
+      <div class="steps-grid" id="steps-grid">
+        <div class="step-card fade-up" id="step-1">
+          <div class="step-num">1</div>
+          <span class="step-emoji">🔍</span>
+          <h3>Monitoramento</h3>
+          <p>Acompanhamos os principais podcasts financeiros do Brasil semanalmente, identificando os episódios com maior densidade de momentos fortes.</p>
+        </div>
+        <div class="step-card fade-up" id="step-2">
+          <div class="step-num">2</div>
+          <span class="step-emoji">✂️</span>
+          <h3>Seleção do Corte</h3>
+          <p>Usamos critérios editoriais para identificar o trecho com maior potencial: previsões, discordâncias, erros admitidos ou frases contraintuitivas.</p>
+        </div>
+        <div class="step-card fade-up" id="step-3">
+          <div class="step-num">3</div>
+          <span class="step-emoji">🎬</span>
+          <h3>Edição Profissional</h3>
+          <p>Aplicamos legendas ativas, contexto visual (nome/cargo), moldura de marca e estrutura de roteiro com gancho, desenvolvimento e CTA.</p>
+        </div>
+        <div class="step-card fade-up" id="step-4">
+          <div class="step-num">4</div>
+          <span class="step-emoji">📱</span>
+          <h3>Publicação</h3>
+          <p>Publicamos nas plataformas TikTok e YouTube Shorts com título otimizado, crédito ao canal de origem e hashtags estratégicas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATS -->
+  <section id="formatos">
+    <div class="formats-center">
+      <div class="fade-up" id="formats-header">
+        <span class="section-label">Formatos de Conteúdo</span>
+        <h2 class="section-title">Cinco tipos de corte editorial</h2>
+        <div class="divider"></div>
+        <p class="section-sub">Cada vídeo se enquadra em uma das categorias abaixo, garantindo variedade e relevância para o público investidor.</p>
+      </div>
+      <div class="formats-grid" id="formats-grid">
+        <div class="format-card fade-up" id="format-previsao">
+          <div class="format-tag">Template 1</div>
+          <h3>⚡ Previsão vs. Realidade</h3>
+          <p>Momentos em que analistas ou gestores fazem afirmações categóricas sobre o futuro do mercado — e o que aconteceu de fato.</p>
+          <div class="format-meta">
+            <span>⏱ 40–70s</span>
+            <span>📈 Alta retenção</span>
+          </div>
+        </div>
+        <div class="format-card fade-up" id="format-debate">
+          <div class="format-tag">Template 2</div>
+          <h3>🔥 Discussão Tensa</h3>
+          <p>Discordâncias diretas entre dois participantes — interrupções, debates técnicos aquecidos e momentos de confronto de visões opostas.</p>
+          <div class="format-meta">
+            <span>⏱ 50–90s</span>
+            <span>💬 Alta interação</span>
+          </div>
+        </div>
+        <div class="format-card fade-up" id="format-conselho">
+          <div class="format-tag">Template 3</div>
+          <h3>💡 Conselho de Ouro</h3>
+          <p>Dica prática, direta e quotável de valor imediato — o tipo de frase que o espectador vai querer anotar ou compartilhar.</p>
+          <div class="format-meta">
+            <span>⏱ 40–60s</span>
+            <span>🔄 Alto compartilhamento</span>
+          </div>
+        </div>
+        <div class="format-card fade-up" id="format-erro">
+          <div class="format-tag">Template 4</div>
+          <h3>💸 Erro Caro</h3>
+          <p>Admissões de erro financeiro com valor ou consequência concreta. Momentos de vulnerabilidade real que humanizam especialistas.</p>
+          <div class="format-meta">
+            <span>⏱ 50–80s</span>
+            <span>❤️ Alta empatia</span>
+          </div>
+        </div>
+        <div class="format-card fade-up" id="format-bastidor">
+          <div class="format-tag">Template 5</div>
+          <h3>🎙 Bastidor Cru</h3>
+          <p>Momentos de vulnerabilidade ou histórico pessoal fora do roteiro "oficial" — o que gestores e analistas não costumam dizer em entrevistas formais.</p>
+          <div class="format-meta">
+            <span>⏱ 60–90s</span>
+            <span>📖 Alta profundidade</span>
+          </div>
+        </div>
+        <div class="format-card fade-up" id="format-longo">
+          <div class="format-tag">Formato Longo</div>
+          <h3>🎥 Corte Horizontal</h3>
+          <p>Compilações de 4–7 minutos do mesmo episódio, unindo múltiplos trechos do mesmo arco temático para o público que quer mais contexto.</p>
+          <div class="format-meta">
+            <span>⏱ 4–7 min</span>
+            <span>🖥 YouTube horizontal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section id="fontes">
+    <div class="sources-center">
+      <div class="fade-up" id="sources-header">
+        <span class="section-label">Fontes de Conteúdo</span>
+        <h2 class="section-title">Os maiores podcasts financeiros do Brasil</h2>
+        <div class="divider"></div>
+        <p class="section-sub">Monitoramos as principais vozes do mercado financeiro brasileiro. Todo conteúdo é creditado ao canal de origem.</p>
+      </div>
+      <div class="sources-row" id="sources-row">
+        <div class="source-chip" id="source-stock-pickers">
+          <div class="source-dot high"></div>
+          <div>
+            <div class="source-name">Stock Pickers</div>
+            <div class="source-type">Prioridade Alta · Debate entre gestores</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-outliers">
+          <div class="source-dot high"></div>
+          <div>
+            <div class="source-name">Outliers (XP/InfoMoney)</div>
+            <div class="source-type">Prioridade Alta · Entrevistas com gestores</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-podinvestir">
+          <div class="source-dot high"></div>
+          <div>
+            <div class="source-name">PodInvestir</div>
+            <div class="source-type">Prioridade Alta · Inteligência Financeira</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-primocast">
+          <div class="source-dot high"></div>
+          <div>
+            <div class="source-name">PrimoCast</div>
+            <div class="source-type">Prioridade Alta · Primo Rico</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-suno">
+          <div class="source-dot high"></div>
+          <div>
+            <div class="source-name">Suno Cast</div>
+            <div class="source-type">Prioridade Alta · Suno Research</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-nord">
+          <div class="source-dot mid"></div>
+          <div>
+            <div class="source-name">Nord Research</div>
+            <div class="source-type">Prioridade Média · Análises técnicas</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-mepoupe">
+          <div class="source-dot mid"></div>
+          <div>
+            <div class="source-name">Me Poupe!</div>
+            <div class="source-type">Prioridade Média · Finanças pessoais</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-btg">
+          <div class="source-dot mid"></div>
+          <div>
+            <div class="source-name">BTG Morning Call</div>
+            <div class="source-type">Prioridade Média · Análise de mercado</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-levante">
+          <div class="source-dot mid"></div>
+          <div>
+            <div class="source-name">Levante Ideias</div>
+            <div class="source-type">Prioridade Média · Ideias de investimento</div>
+          </div>
+        </div>
+        <div class="source-chip" id="source-empiricus">
+          <div class="source-dot low"></div>
+          <div>
+            <div class="source-name">Empiricus & similares</div>
+            <div class="source-type">Complementar · Histórias e trajetórias</div>
+          </div>
+        </div>
+      </div>
+      <div class="sources-legend" id="sources-legend">
+        <div class="legend-item"><div class="source-dot high"></div> Prioridade Alta</div>
+        <div class="legend-item"><div class="source-dot mid"></div> Prioridade Média</div>
+        <div class="legend-item"><div class="source-dot low"></div> Complementar</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section id="plataformas">
+    <div class="platforms-center">
+      <div class="fade-up" id="platforms-header">
+        <span class="section-label">Plataformas</span>
+        <h2 class="section-title">Onde você nos encontra</h2>
+        <div class="divider"></div>
+        <p class="section-sub">Publicamos o mesmo conteúdo curado em duas plataformas de short-form video, adaptando o formato para cada algoritmo.</p>
+      </div>
+      <div class="platforms-grid" id="platforms-grid">
+        <div class="platform-card fade-up" id="platform-tiktok">
+          <div class="platform-icon tiktok">🎵</div>
+          <div class="platform-info">
+            <h3>TikTok</h3>
+            <p>Canal principal para short-form vertical. Publicação diária em horário fixo, com caption otimizado para o algoritmo TikTok e hashtags estratégicas do nicho de investimentos.</p>
+          </div>
+        </div>
+        <div class="platform-card fade-up" id="platform-youtube">
+          <div class="platform-icon youtube">▶</div>
+          <div class="platform-info">
+            <h3>YouTube Shorts & Canal</h3>
+            <p>Mesmos cortes no YouTube Shorts e versão horizontal longa (4–7 min) no canal principal. Título otimizado para SEO e cards de crédito ao canal de origem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US / MISSION -->
+  <section id="sobre-nos">
+    <div class="about-us-center">
+      <div class="fade-up" id="mission-header">
+        <span class="section-label">Nossa Missão</span>
+        <h2 class="section-title">Por que fazemos isso</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="mission-box fade-up" id="mission-box">
+        <div class="mission-text">
+          "O investidor brasileiro intermediário não tem tempo para ouvir podcasts de 1 hora. Mas <span class="gold">ele merece saber o que os grandes gestores estão pensando.</span> Nós fazemos essa ponte."
+        </div>
+        <div class="mission-author">— Cortes do Mercado, missão editorial</div>
+      </div>
+      <div class="principles-grid" id="principles-grid">
+        <div class="principle-card fade-up" id="principle-1">
+          <div class="principle-num">01</div>
+          <h4>Crédito sempre</h4>
+          <p>Todo vídeo inclui crédito explícito ao canal/podcast de origem com link direto para o episódio completo.</p>
+        </div>
+        <div class="principle-card fade-up" id="principle-2">
+          <div class="principle-num">02</div>
+          <h4>Transformação real</h4>
+          <p>Não recortamos e republicamos. Aplicamos legenda, contexto visual, identidade de marca e estrutura editorial em cada vídeo.</p>
+        </div>
+        <div class="principle-card fade-up" id="principle-3">
+          <div class="principle-num">03</div>
+          <h4>Conteúdo autônomo</h4>
+          <p>Cada corte precisa fazer sentido sozinho, sem que o espectador precise ter assistido o episódio original.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contato">
+    <div class="contact-center">
+      <div class="fade-up" id="contact-header">
+        <span class="section-label">Contato</span>
+        <h2 class="section-title">Fale com a gente</h2>
+        <div class="divider" style="margin: 20px auto 0;"></div>
+      </div>
+      <div class="contact-card fade-up" id="contact-card">
+        <p style="color: var(--text-secondary); font-size: 16px; line-height: 1.7;">
+          Para parcerias, colaborações com podcasts e canais financeiros, ou para solicitar remoção de conteúdo, entre em contato pelos canais abaixo.
+        </p>
+        <a href="mailto:contato@cortesdomercado.com.br" class="contact-email" id="contact-email-link">
+          📧 contato@cortesdomercado.com.br
+        </a>
+        <div class="contact-links" id="contact-links">
+          <a href="https://www.tiktok.com/@cortesdomercado" target="_blank" rel="noopener noreferrer" class="contact-link" id="contact-tiktok">
+            🎵 TikTok
+          </a>
+          <a href="https://www.youtube.com/@cortesdomercado" target="_blank" rel="noopener noreferrer" class="contact-link" id="contact-youtube">
+            ▶ YouTube
+          </a>
+          <a href="politica-de-privacidade.html" class="contact-link" id="contact-privacy">
+            🔒 Política de Privacidade
+          </a>
+          <a href="termos-de-uso.html" class="contact-link" id="contact-terms">
+            📄 Termos de Uso
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="main-footer">
+    <div class="footer-inner">
+      <a href="#" class="footer-logo" id="footer-logo-link">
+        <img src="assets/logo-icon.png" alt="Cortes do Mercado" id="footer-logo-img">
+        <span class="footer-logo-text">CORTES <span>DO MERCADO</span></span>
+      </a>
+      <ul class="footer-links" id="footer-nav">
+        <li><a href="#sobre" id="footer-link-sobre">Sobre</a></li>
+        <li><a href="#plataformas" id="footer-link-plataformas">Plataformas</a></li>
+        <li><a href="politica-de-privacidade.html" id="footer-link-privacy">Privacidade</a></li>
+        <li><a href="termos-de-uso.html" id="footer-link-terms">Termos</a></li>
+      </ul>
+      <p class="footer-copy">© 2025 Cortes do Mercado · O mercado financeiro em 60 segundos</p>
+    </div>
+  </footer>
+
+  <script>
+    // Candlestick background
+    const bg = document.getElementById('candlestick-bg');
+    const candleData = [
+      {h:120,b:80,green:true},{h:200,b:140,green:false},{h:160,b:100,green:true},
+      {h:90,b:60,green:true},{h:240,b:180,green:false},{h:130,b:90,green:true},
+      {h:180,b:120,green:false},{h:110,b:70,green:true},{h:210,b:150,green:false},
+      {h:150,b:100,green:true},{h:280,b:200,green:true},{h:100,b:65,green:false},
+      {h:190,b:130,green:true},{h:170,b:115,green:false},{h:220,b:160,green:true},
+      {h:80,b:50,green:false},{h:250,b:190,green:true},{h:140,b:95,green:true},
+    ];
+
+    candleData.forEach((c, i) => {
+      const div = document.createElement('div');
+      div.className = 'candle';
+      const wickTop = document.createElement('div');
+      wickTop.className = 'candle-wick';
+      wickTop.style.height = ((c.h - c.b) / 2) + 'px';
+      wickTop.style.animationDelay = (i * 0.2) + 's';
+      const body = document.createElement('div');
+      body.className = 'candle-body ' + (c.green ? 'green' : 'red');
+      body.style.height = c.b + 'px';
+      body.style.animationDelay = (i * 0.15) + 's';
+      const wickBot = document.createElement('div');
+      wickBot.className = 'candle-wick';
+      wickBot.style.height = ((c.h - c.b) / 2) + 'px';
+      wickBot.style.animationDelay = (i * 0.2 + 0.1) + 's';
+      div.appendChild(wickTop);
+      div.appendChild(body);
+      div.appendChild(wickBot);
+      bg.appendChild(div);
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Stagger children inside grids
+    document.querySelectorAll('.steps-grid .step-card, .formats-grid .format-card, .principles-grid .principle-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+
+    // Nav shadow on scroll
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 40
+        ? 'rgba(13, 31, 15, 0.97)'
+        : 'rgba(13, 31, 15, 0.85)';
+    }, { passive: true });
+  </script>
+
 </body>
 </html>
