@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cortes do Mercado — O mercado financeiro em 60 segundos</title>
+  <title>Cortes do Mercado | O mercado financeiro em 60 segundos</title>
   <meta name="description" content="Cortes do Mercado traz os momentos mais impactantes dos maiores podcasts financeiros do Brasil. Previsões, debates e bastidores do mercado financeiro, em formato curto.">
   <meta property="og:title" content="Cortes do Mercado">
   <meta property="og:description" content="O mercado financeiro em 60 segundos. Os melhores momentos dos maiores podcasts de investimentos do Brasil.">
@@ -15,7 +15,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #030504;
+      --bg-base: #040805;
+      --bg-gradient-top: #0b1a0d;
       --bg-elevated: rgba(255, 255, 255, 0.02);
       --bg-elevated-hover: rgba(255, 255, 255, 0.04);
       --border-subtle: rgba(255, 255, 255, 0.08);
@@ -35,13 +36,31 @@
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg-base);
+      background: radial-gradient(circle at top right, var(--bg-gradient-top) 0%, var(--bg-base) 100%);
+      background-attachment: fixed;
       color: var(--text-main);
       line-height: 1.6;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* ── BACKGROUND GLOWS ── */
+    /* ── BACKGROUND ELEMENTS ── */
+    .grid-overlay {
+      position: fixed; inset: 0;
+      background-image: 
+        linear-gradient(rgba(216, 164, 54, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(216, 164, 54, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      z-index: -2; pointer-events: none;
+    }
+    .bg-logo-watermark {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70vw; max-width: 800px;
+      opacity: 0.015;
+      z-index: -2; pointer-events: none;
+    }
     .glow-orb {
       position: absolute;
       border-radius: 50%;
@@ -66,7 +85,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       padding: 20px 48px;
       display: flex; align-items: center; justify-content: space-between;
-      background: rgba(3, 5, 4, 0.6);
+      background: rgba(4, 8, 5, 0.6);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-subtle);
       transition: all 0.3s;
@@ -107,13 +126,16 @@
       position: relative;
     }
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
       color: var(--gold); margin-bottom: 32px;
-      background: var(--gold-dim);
-      padding: 6px 16px; border-radius: 100px;
-      border: 1px solid var(--border-glow);
+    }
+    .hero-eyebrow::before {
+      content: ''; display: inline-block;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
     }
     .hero h1 {
       font-size: clamp(48px, 6vw, 84px);
@@ -266,7 +288,7 @@
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border-subtle);
-      padding: 48px; background: rgba(3, 5, 4, 0.8);
+      padding: 48px; background: rgba(4, 8, 5, 0.8);
     }
     .footer-inner {
       max-width: 1200px; margin: 0 auto;
@@ -309,6 +331,9 @@
 </head>
 <body>
 
+  <!-- BACKGROUND DEPTH ELEMENTS -->
+  <div class="grid-overlay"></div>
+  <img src="assets/logo-icon.png" alt="Logo Watermark" class="bg-logo-watermark">
   <div class="glow-orb orb-top"></div>
   <div class="glow-orb orb-left"></div>
 
@@ -331,7 +356,7 @@
     <div class="hero-eyebrow reveal">O ESSENCIAL DO MERCADO FINANCEIRO</div>
     <h1 class="reveal">O mercado financeiro<br>em <span class="gold">60 segundos</span></h1>
     <p class="hero-desc reveal">
-      Os momentos mais impactantes dos maiores podcasts financeiros do Brasil — previsões que dividiram opiniões, debates que ficaram na história e bastidores de quem move bilhões.
+      Os momentos mais impactantes dos maiores podcasts financeiros do Brasil. Previsões que dividiram opiniões, debates que ficaram na história e bastidores de quem move bilhões.
     </p>
     <div class="hero-actions reveal">
       <a href="https://www.tiktok.com/@cortesdomercadoofc" target="_blank" rel="noopener noreferrer" class="btn-primary">
@@ -350,18 +375,18 @@
         <div class="glass-card about-main reveal">
           <div class="hero-eyebrow">CURADORIA EDITORIAL</div>
           <h3>Feito para quem não tem uma hora a perder</h3>
-          <p>Selecionamos os trechos que realmente importam — não os mais longos ou os mais bem editados, mas aqueles que entregam valor imediato. O mercado financeiro tem momentos extraordinários espalhados em horas de podcast. Nós encontramos eles para você.</p>
+          <p>Selecionamos os trechos que realmente importam. Não focamos nos mais longos ou nos mais bem editados, mas sim naqueles que entregam valor imediato. O mercado financeiro tem momentos extraordinários espalhados em horas de podcast. Nós encontramos eles para você.</p>
         </div>
         <div class="about-side">
           <div class="glass-card pillar-card reveal">
             <span class="pillar-num">01</span>
             <h4>Direto ao ponto</h4>
-            <p>Cada vídeo começa no ponto mais forte. Sem introduções, sem aquecimento.</p>
+            <p>Cada vídeo começa no ponto mais forte. Sem introduções vazias, sem aquecimento.</p>
           </div>
           <div class="glass-card pillar-card reveal">
             <span class="pillar-num">02</span>
             <h4>Contexto claro</h4>
-            <p>Quem fala, por que importa e o que está sendo debatido — tudo evidente na tela.</p>
+            <p>Quem fala, por que importa e o que está sendo debatido. Tudo evidente na tela.</p>
           </div>
         </div>
       </div>
@@ -379,32 +404,32 @@
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Previsões</div>
           <h3>"Eu avisei antes de todo mundo"</h3>
-          <p>Quando um gestor faz uma afirmação categórica sobre o mercado — e o tempo prova se ele estava certo ou completamente errado.</p>
+          <p>Quando um gestor faz uma afirmação categórica sobre o mercado e o tempo prova se ele estava certo ou completamente errado.</p>
         </div>
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Debates</div>
           <h3>Quando especialistas discordam</h3>
-          <p>Dois gestores, visões opostas, nenhum dos dois cedendo. Os momentos mais eletrizantes do mercado financeiro.</p>
+          <p>Dois gestores, visões opostas e nenhum dos dois cedendo. Os momentos mais eletrizantes do mercado financeiro em um só lugar.</p>
         </div>
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Insights</div>
           <h3>A frase que vai ficar na cabeça</h3>
-          <p>O conselho direto que ninguém dá em entrevista formal. Em 60 segundos você já sai com algo concreto e aplicável.</p>
+          <p>O conselho direto que ninguém dá em entrevista formal. Em 60 segundos você já sai com algo concreto e aplicável na prática.</p>
         </div>
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Erros</div>
           <h3>"Perdi tudo e aprendi assim"</h3>
-          <p>Gestores e investidores admitindo erros reais com valores concretos. Aprenda com os erros mais caros do mercado.</p>
+          <p>Gestores e investidores admitindo erros reais com valores concretos. Aprenda com as perdas mais caras da história do mercado.</p>
         </div>
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Bastidores</div>
           <h3>O que não falam na mídia</h3>
-          <p>Vulnerabilidades e histórias que só saem quando o microfone está ligado há horas. O lado humano de quem move bilhões.</p>
+          <p>Vulnerabilidades e histórias que só saem quando o microfone está ligado há horas. O lado humano por trás de quem move bilhões.</p>
         </div>
         <div class="glass-card content-card reveal">
           <div class="pillar-num">Análise Profunda</div>
-          <h3>Para quem quer ir mais fundo</h3>
-          <p>Reunimos os melhores trechos de um mesmo debate em análises longas e completas, exclusivas no YouTube.</p>
+          <h3>Para quem quer ir além</h3>
+          <p>Reunimos os melhores trechos de um mesmo debate em análises longas e completas, disponibilizadas exclusivamente no YouTube.</p>
         </div>
       </div>
     </div>
@@ -437,7 +462,7 @@
         <div class="glass-card platform-card reveal">
           <img src="assets/favicon.png" style="width: 48px; opacity: 0.5; margin-bottom: 24px;" alt="TikTok">
           <h3>Formato Vertical</h3>
-          <p>Publicação diária com os melhores momentos dos podcasts no TikTok — perfeito para o feed do seu celular.</p>
+          <p>Publicação diária com os melhores momentos dos podcasts no TikTok. O conteúdo perfeito para o feed do seu celular.</p>
           <a href="https://www.tiktok.com/@cortesdomercadoofc" target="_blank" rel="noopener noreferrer" class="btn-primary">
             Seguir no TikTok
           </a>
@@ -445,7 +470,7 @@
         <div class="glass-card platform-card reveal">
           <img src="assets/logo-icon.png" style="width: 48px; opacity: 0.5; margin-bottom: 24px;" alt="YouTube">
           <h3>Formato Horizontal</h3>
-          <p>Shorts diários e análises profundas em formato longo para quem quer mergulhar nos temas abordados.</p>
+          <p>Shorts diários e análises profundas em formato longo para quem quer mergulhar nos temas abordados de forma detalhada.</p>
           <a href="https://www.youtube.com/channel/UCOSJEtM5FuDPWTP9FWp85Gw" target="_blank" rel="noopener noreferrer" class="btn-glass">
             Acompanhar no YouTube
           </a>
@@ -494,10 +519,10 @@
     const nav = document.getElementById('main-nav');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 50) {
-        nav.style.background = 'rgba(3, 5, 4, 0.85)';
+        nav.style.background = 'rgba(4, 8, 5, 0.85)';
         nav.style.borderBottomColor = 'rgba(255, 255, 255, 0.12)';
       } else {
-        nav.style.background = 'rgba(3, 5, 4, 0.6)';
+        nav.style.background = 'rgba(4, 8, 5, 0.6)';
         nav.style.borderBottomColor = 'rgba(255, 255, 255, 0.08)';
       }
     });
